@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản Lý Chấm Công</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="container py-5">
+
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">HỆ THỐNG CHẤM CÔNG ĐIỆN TỬ</h2>
+        <p class="text-muted">Quản lý thời gian làm việc nhân viên</p>
+    </div>
+
+    <div th:if="${thongBao}" class="alert alert-info alert-dismissible fade show" role="alert">
+        <i class="bi bi-info-circle-fill"></i> <strong th:text="${thongBao}"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card p-4 mb-4">
+                <h4 class="card-title text-success">📍 Điểm Danh</h4>
+                <hr>
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nhập Mã Nhân Viên:</label>
+                        <input type="text" class="form-control form-control-lg" name="maNV" placeholder="VD: NV01" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" formaction="/cham-cong/check-in" class="btn btn-success btn-lg">
+                            ☀️ Check-in (Vào)
+                        </button>
+                        
+                        <button type="submit" formaction="/cham-cong/check-out" class="btn btn-warning btn-lg text-white">
+                            🌙 Check-out (Ra)
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="d-grid">
+                <a href="/cham-cong/xuat-excel" class="btn btn-primary">
+                    📥 Tải Báo Cáo Excel
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h4 class="card-title text-secondary">📋 Lịch Sử Hôm Nay</h4>
+                <div class="table-responsive mt-3">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nhân Viên</th>
+                                <th>Ngày</th>
+                                <th>Giờ Vào</th>
+                                <th>Giờ Ra</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cc : ${dsChamCong}">
+                                <td th:text="${cc.id}"></td>
+                                <td th:text="${cc.nhanVien.maNV} + ' - ' + ${cc.nhanVien.hoTen}"></td>
+                                <td th:text="${cc.ngayChamCong}"></td>
+                                <td th:text="${cc.gioVao}" class="text-success fw-bold"></td>
+                                <td th:text="${cc.gioRa}" class="text-danger fw-bold"></td>
+                                
+                                <td>
+                                    <span th:if="${cc.trangThai.name() == 'CO_MAT'}" class="badge bg-success">Đúng giờ</span>
+                                    <span th:if="${cc.trangThai.name() == 'DI_MUON'}" class="badge bg-warning text-dark">Đi muộn</span>
+                                    <span th:if="${cc.trangThai.name() == 'VANG'}" class="badge bg-danger">Vắng</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${#lists.isEmpty(dsChamCong)}" class="text-center text-muted mt-3">
+                    <p>Chưa có dữ liệu chấm công nào.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

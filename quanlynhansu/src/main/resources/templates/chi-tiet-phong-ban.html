@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi Tiết Phòng Ban</title>
+    <style>
+        body { font-family: sans-serif; padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .btn-move { background: #ffc107; color: black; text-decoration: none; padding: 5px 10px; border-radius: 4px;}
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>📂 Phòng: <span th:text="${phongBan.tenPhong}"></span></h1>
+            <p>Mã phòng: <b th:text="${phongBan.maPhong}"></b></p>
+        </div>
+        <a href="/phong-ban" style="font-size: 18px;">⬅️ Quay lại DS Phòng</a>
+    </div>
+
+    <h3>Danh sách nhân viên đang công tác:</h3>
+
+    <div th:if="${dsNhanVien.empty}">
+        <p style="color: gray;">(Chưa có nhân viên nào trong phòng này)</p>
+    </div>
+
+    <table th:unless="${dsNhanVien.empty}">
+        <thead>
+            <tr>
+                <th>Mã NV</th>
+                <th>Họ Tên</th>
+                <th>Chức Vụ / Vị Trí</th>
+                <th>Điều Chuyển</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="nv : ${dsNhanVien}">
+                <td th:text="${nv.maNV}"></td>
+                <td th:text="${nv.hoTen}"></td>
+                
+                <td>
+                    <span th:if="${nv.class.name.contains('FullTime')}" th:text="${nv.chucVu}"></span>
+                    <span th:if="${nv.class.name.contains('PartTime')}">Nhân viên thời vụ</span>
+                </td>
+
+                <td>
+                    <a th:href="@{/sua-nhan-vien(maNV=${nv.maNV})}" class="btn-move">🔄 Điều chuyển</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
+            

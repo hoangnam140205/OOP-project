@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${isEdit} ? 'Cập Nhật Nhân Viên' : 'Thêm Nhân Viên Mới'">Thêm Nhân Viên</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background-color: #f4f4f4; }
+        .form-container { background: white; padding: 30px; border-radius: 8px; width: 500px; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        input, select { width: 95%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; } /* box-sizing fix layout */
+        label { font-weight: bold; margin-top: 15px; display: block; color: #333; }
+        button { background-color: #28a745; color: white; padding: 12px; width: 100%; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 25px; transition: background 0.3s;}
+        button:hover { background-color: #218838; }
+        .hidden { display: none; }
+        .section-title { color: #007bff; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 25px; margin-bottom: 10px;}
+        
+        /* Style cho thông báo lỗi */
+        .alert-error {
+            background-color: #f8d7da; color: #721c24; padding: 10px; 
+            border-radius: 4px; margin-bottom: 15px; border: 1px solid #f5c6cb;
+            text-align: center;
+        }
+        
+        /* Style cho input bị khóa (readonly) */
+        input[readonly] { background-color: #e9ecef; cursor: not-allowed; color: #6c757d; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2 style="text-align: center; color: #333;" 
+        th:text="${isEdit} ? '✏️ Cập Nhật Hồ Sơ' : '➕ Thêm Nhân Viên Mới'">
+    </h2>
+    
+    <div th:if="${error}" class="alert-error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form action="/luu" method="POST">
+        
+        <label>Mã Nhân Viên (*):</label>
+        <input type="text" name="maNV" 
+               th:value="${maNV}" 
+               th:readonly="${isEdit}"
+               placeholder="VD: NV005" required>
+
+        <label>Họ và Tên:</label>
+        <input type="text" name="hoTen" th:value="${hoTen}" required>
+
+        <label>Số điện thoại:</label>
+        <input type="text" name="soDienThoai" th:value="${soDienThoai}">
+
+        <label>Thuộc Phòng Ban:</label>
+        <select name="maPhong">
+            <option th:each="pb : ${danhSachPhongBan}" 
+                    th:value="${pb.maPhong}" 
+                    th:text="${pb.tenPhong}"
+                    th:selected="${pb.maPhong == maPhong}">
+            </option>
+        </select>
+
+        <label>Loại Hợp Đồng:</label>
+        <select id="loaiNhanVien" name="loaiNhanVien" onchange="doiLoaiNhanVien()">
+            <option value="FULL_TIME" th:selected="${loaiNhanVien == 'FULL_TIME'}">Nhân viên Full Time</option>
+            <option value="PART_TIME" th:selected="${loaiNhanVien == 'PART_TIME'}">Nhân viên Part Time</option>
+        </select>
+
+        <div id="formFullTime">
+            <h4 class="section-title">💼 Thông tin Full Time</h4>
+            <label>Chức vụ:</label> 
+            <input type="text" name="chucVu" th:value="${chucVu}">
+            
+            <label>Hệ số lương:</label> 
+            <input type="number" step="0.1" name="heSoLuongStr" th:value="${heSoLuong}">
+            
+            <label>Lương cơ bản:</label> 
+            <input type="number" name="luongCoBanStr" th:value="${luongCoBan}">
+        </div>
+
+        <div id="formPartTime" class="hidden">
+            <h4 class="section-title">⏱️ Thông tin Part Time</h4>
+            <label>Số giờ làm:</label> 
+            <input type="number" name="soGioLamStr" th:value="${soGioLam}">
+            
+            <label>Lương theo giờ:</label> 
+            <input type="number" name="luongTheoGioStr" th:value="${luongTheoGio}">
+        </div>
+
+        <button type="submit" th:text="${isEdit} ? 'Lưu Thay Đổi' : 'Lưu Hồ Sơ'"></button>
+    </form>
+    
+    <a href="/" style="display:block; text-align:center; margin-top:15px; text-decoration: none; color: #666;">
+        ⬅️ Quay lại danh sách
+    </a>
+</div>
+
+<script>
+    function doiLoaiNhanVien() {
+        var loai = document.getElementById("loaiNhanVien").value;
+        if (loai === "FULL_TIME") {
+            document.getElementById("formFullTime").classList.remove("hidden");
+            document.getElementById("formPartTime").classList.add("hidden");
+        } else {
+            document.getElementById("formFullTime").classList.add("hidden");
+            document.getElementById("formPartTime").classList.remove("hidden");
+        }
+    }
+
+    window.onload = function() {
+        doiLoaiNhanVien();
+    };
+</script>
+
+</body>
+</html>

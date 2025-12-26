@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh Sách Nhân Viên</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; padding: 20px; }
+        
+        /* --- 1. CSS CHO MENU ĐIỀU HƯỚNG --- */
+        .navbar {
+            background-color: #343a40;
+            overflow: hidden;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .navbar a:hover { background-color: #495057; }
+        .navbar a.active { background-color: #007bff; color: white; }
+
+        /* --- CSS CHO BẢNG VÀ NÚT --- */
+        h1 { color: #343a40; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        
+        .btn { padding: 8px 15px; border: none; border-radius: 4px; color: white; cursor: pointer; text-decoration: none; font-size: 14px; display: inline-block;}
+        .btn-add { background-color: #28a745; font-size: 16px; padding: 10px 20px; margin-bottom: 15px; }
+        .btn-edit { background-color: #ffc107; color: black; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-search { background-color: #007bff; }
+
+        .search-box { margin-bottom: 20px; display: flex; gap: 10px; align-items: center;}
+        .search-input { padding: 10px; width: 300px; border: 1px solid #ced4da; border-radius: 4px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #007bff; color: white; padding: 12px; text-align: left; }
+        td { border-bottom: 1px solid #ddd; padding: 12px; }
+        tr:hover { background-color: #f1f1f1; }
+        
+        /* Badge cho loại nhân viên */
+        .badge { padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .badge-full { background-color: #cce5ff; color: #004085; }
+        .badge-part { background-color: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="/" class="active">👥 Quản Lý Nhân Viên</a>
+        <a href="/phong-ban">🏢 Quản Lý Phòng Ban</a>
+    </div>
+
+    <div class="container">
+        <h1>📋 Danh Sách Nhân Viên</h1>
+
+        <a href="/them-moi" class="btn btn-add">➕ Thêm Nhân Viên Mới</a>
+
+        <div class="search-box">
+            <form action="/" method="GET" style="display: flex; gap: 10px;">
+                <input type="text" name="tuKhoa" 
+                       placeholder="Nhập tên hoặc mã nhân viên..." 
+                       th:value="${tuKhoa}" class="search-input">
+                <button type="submit" class="btn btn-search">🔍 Tìm kiếm</button>
+                <a href="/" style="padding: 10px; text-decoration: none; color: #666;">❌ Hủy lọc</a>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>MÃ NV</th>
+                    <th>HỌ TÊN</th>
+                    <th>SĐT</th>
+                    <th>PHÒNG BAN</th>
+                    <th>LOẠI NV</th>
+                    <th>LƯƠNG / THU NHẬP</th>
+                    <th>HÀNH ĐỘNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${danhSachNhanVien.empty}">
+                    <td colspan="7" style="text-align: center; color: gray;">Không tìm thấy nhân viên nào.</td>
+                </tr>
+
+                <tr th:each="nv : ${danhSachNhanVien}">
+                    <td th:text="${nv.maNV}"></td>
+                    <td th:text="${nv.hoTen}" style="font-weight: bold;"></td>
+                    <td th:text="${nv.soDienThoai}"></td>
+                    
+                    <td th:text="${nv.phongBan != null ? nv.phongBan.tenPhong : 'Chưa có phòng'}"></td>
+
+                    <td>
+                        <span th:if="${nv instanceof T(com.hrm.quanlynhansu.entity.NhanVienFullTime)}" class="badge badge-full">Full Time</span>
+                        <span th:if="${nv instanceof T(com.hrm.quanlynhansu.entity.NhanVienPartTime)}" class="badge badge-part">Part Time</span>
+                    </td>
+
+                    <td>
+                        <div th:if="${nv instanceof T(com.hrm.quanlynhansu.entity.NhanVienFullTime)}">
+                            <span th:text="${nv.luongCoBan != null ? #numbers.formatDecimal(nv.luongCoBan, 0, 'COMMA', 0, 'POINT') : '0'} + ' VNĐ'"></span>
+                        </div>
+
+                        <div th:if="${nv instanceof T(com.hrm.quanlynhansu.entity.NhanVienPartTime)}">
+                            <span th:text="${nv.luongTheoGio != null ? #numbers.formatDecimal(nv.luongTheoGio, 0, 'COMMA', 0, 'POINT') : '0'} + ' VNĐ/giờ'"></span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/sua-nhan-vien(maNV=${nv.maNV})}" class="btn btn-edit">✏️ Sửa</a>
+                        
+                        <a th:href="@{/xoa-nhan-vien(maNV=${nv.maNV})}" 
+                           class="btn btn-delete"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này không?');">🗑️ Xóa</a>
+                    </td>
+                </tr>
+            </tbody>        
+        </table>
+    </div>
+
+</body>
+</html>

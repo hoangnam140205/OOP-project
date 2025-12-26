@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sửa Nhân Viên</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 30px; background-color: #f4f4f4; }
+        .form-container { background: white; padding: 30px; border-radius: 8px; width: 500px; margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, select { width: 95%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; }
+        label { font-weight: bold; margin-top: 10px; display: block; }
+        button { background-color: #FFA500; color: white; padding: 12px; width: 100%; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px;}
+        .hidden { display: none; }
+        .readonly { background-color: #e9ecef; cursor: not-allowed; } /* Màu xám cho ô không được sửa */
+    </style>
+</head>
+<body onload="khoiTaoForm()"> <div class="form-container">
+    <h2 style="text-align: center;">🛠️ Cập Nhật Hồ Sơ</h2>
+    
+    <form action="/luu" method="POST">
+        
+        <label>Mã Nhân Viên (Không được sửa):</label>
+        <input type="text" name="maNV" th:value="${nv.maNV}" class="readonly" readonly>
+
+        <label>Họ và Tên:</label>
+        <input type="text" name="hoTen" th:value="${nv.hoTen}" required>
+
+        <label>Số điện thoại:</label>
+        <input type="text" name="soDienThoai" th:value="${nv.soDienThoai}">
+
+        <label>Thuộc Phòng Ban:</label>
+        <select name="maPhong">
+            <option th:each="pb : ${danhSachPhongBan}" 
+                    th:value="${pb.maPhong}" 
+                    th:text="${pb.tenPhong}"
+                    th:selected="${nv.phongBan != null and pb.maPhong == nv.phongBan.maPhong}">
+            </option>
+        </select>
+
+        <label>Loại Hợp Đồng:</label>
+        <select id="loaiNhanVien" name="loaiNhanVien" onchange="doiLoaiNhanVien()">
+            <option value="FULL_TIME" th:selected="${loaiNhanVien == 'FULL_TIME'}">Nhân viên Full Time</option>
+            <option value="PART_TIME" th:selected="${loaiNhanVien == 'PART_TIME'}">Nhân viên Part Time</option>
+        </select>
+
+        <div id="formFullTime" class="hidden">
+            <h4 style="color:#007bff; border-bottom: 1px solid #ccc;">💼 Thông tin Full Time</h4>
+            <label>Chức vụ:</label> <input type="text" name="chucVu" th:value="${chucVu}">
+            <label>Hệ số lương:</label> <input type="number" step="0.1" name="heSoLuong" th:value="${heSoLuong}">
+            <label>Lương cơ bản:</label> <input type="number" name="luongCoBan" th:value="${luongCoBan != null ? #numbers.formatDecimal(luongCoBan, 0, 'NONE', 0, 'POINT') : ''}">
+        </div>
+
+        <div id="formPartTime" class="hidden">
+            <h4 style="color:#007bff; border-bottom: 1px solid #ccc;">⏱️ Thông tin Part Time</h4>
+            <label>Số giờ làm:</label> <input type="number" name="soGioLam" th:value="${soGioLam}">
+            <label>Lương theo giờ:</label> <input type="number" name="luongTheoGio" th:value="${luongTheoGio != null ? #numbers.formatDecimal(luongTheoGio, 0, 'NONE', 0, 'POINT') : ''}">
+        </div>
+
+        <button type="submit">Cập Nhật</button>
+    </form>
+    
+    <a href="/" style="display:block; text-align:center; margin-top:15px; text-decoration: none;">🔙 Quay lại</a>
+</div>
+
+<script>
+    // Hàm này chạy ngay khi trang load để hiện đúng form (FullTime hay PartTime)
+    function khoiTaoForm() {
+        doiLoaiNhanVien();
+    }
+
+    function doiLoaiNhanVien() {
+        var loai = document.getElementById("loaiNhanVien").value;
+        if (loai === "FULL_TIME") {
+            document.getElementById("formFullTime").classList.remove("hidden");
+            document.getElementById("formPartTime").classList.add("hidden");
+        } else {
+            document.getElementById("formFullTime").classList.add("hidden");
+            document.getElementById("formPartTime").classList.remove("hidden");
+        }
+    }
+</script>
+
+</body>
+</html>

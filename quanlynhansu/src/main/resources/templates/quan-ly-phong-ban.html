@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản Lý Phòng Ban</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; padding: 20px; }
+
+        /* --- 1. NAVBAR (Menu điều hướng) --- */
+        .navbar {
+            background-color: #343a40;
+            overflow: hidden;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .navbar a:hover { background-color: #495057; }
+        .navbar a.active { background-color: #007bff; color: white; }
+
+        /* --- 2. BỐ CỤC 2 CỘT --- */
+        .main-container { display: flex; gap: 20px; }
+        .column-list { flex: 2; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        .column-form { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); height: fit-content; }
+
+        /* --- 3. BẢNG & FORM --- */
+        h2 { margin-top: 0; color: #343a40; border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background-color: #007bff; color: white; padding: 10px; text-align: left; }
+        td { border-bottom: 1px solid #ddd; padding: 10px; }
+        tr:hover { background-color: #f1f1f1; }
+
+        label { font-weight: bold; display: block; margin-top: 10px; color: #555; }
+        input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[readonly] { background-color: #e9ecef; cursor: not-allowed; }
+
+        /* --- 4. BUTTONS & ALERTS --- */
+        .btn { padding: 5px 10px; text-decoration: none; color: white; border-radius: 4px; font-size: 13px; margin-right: 5px; display: inline-block;}
+        .btn-detail { background-color: #17a2b8; }
+        .btn-edit { background-color: #ffc107; color: black; }
+        .btn-delete { background-color: #dc3545; }
+        
+        .btn-save { background-color: #28a745; width: 100%; padding: 10px; border: none; font-size: 16px; margin-top: 20px; cursor: pointer; color: white; border-radius: 4px; }
+        .btn-save:hover { background-color: #218838; }
+
+        .btn-cancel { display: block; text-align: center; margin-top: 10px; text-decoration: none; color: #666; }
+
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="/">👥 Quản Lý Nhân Viên</a>
+        <a href="/phong-ban" class="active">🏢 Quản Lý Phòng Ban</a>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="column-list">
+            <h2>🏢 Danh Sách Phòng Ban</h2>
+
+            <div th:if="${success}" class="alert alert-success">
+                <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error">
+                <span th:text="${error}"></span>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Mã Phòng</th>
+                        <th style="width: 40%;">Tên Phòng</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${dsPhongBan.empty}">
+                        <td colspan="3" style="text-align: center; color: gray;">Chưa có dữ liệu phòng ban.</td>
+                    </tr>
+                    <tr th:each="pb : ${dsPhongBan}">
+                        <td th:text="${pb.maPhong}" style="font-weight: bold;"></td>
+                        <td th:text="${pb.tenPhong}"></td>
+                        <td>
+                            <a th:href="@{/phong-ban/chi-tiet(maPhong=${pb.maPhong})}" class="btn btn-detail">👥 Nhân sự</a>
+                            
+                            <a th:href="@{/phong-ban/sua(maPhong=${pb.maPhong})}" class="btn btn-edit">✏️ Sửa</a>
+                            
+                            <a th:href="@{/phong-ban/xoa(maPhong=${pb.maPhong})}" 
+                               class="btn btn-delete"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa phòng này không? Lưu ý: Phòng phải không còn nhân viên mới xóa được.');">🗑️ Xóa</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="column-form">
+            <h2 th:text="${isEdit} ? '✏️ Cập Nhật' : '➕ Thêm Mới'"></h2>
+
+            <form action="/phong-ban/luu" method="post" th:object="${phongBan}">
+                
+                <label>Mã Phòng (*):</label>
+                <input type="text" th:field="*{maPhong}" 
+                       th:readonly="${isEdit}" 
+                       placeholder="VD: PB01" required>
+                <small style="color: gray;" th:if="${!isEdit}">Mã phòng không thể sửa sau khi tạo.</small>
+
+                <label>Tên Phòng:</label>
+                <input type="text" th:field="*{tenPhong}" placeholder="VD: Phòng Kế Toán" required>
+
+                <button type="submit" class="btn-save" th:text="${isEdit} ? 'Lưu Thay Đổi' : 'Tạo Phòng Mới'"></button>
+                
+                <a href="/phong-ban" class="btn-cancel" th:if="${isEdit}">❌ Hủy bỏ, quay lại thêm mới</a>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>
