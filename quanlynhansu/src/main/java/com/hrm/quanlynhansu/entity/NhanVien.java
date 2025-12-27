@@ -31,6 +31,12 @@ public abstract class NhanVien { // Thêm abstract vì sơ đồ lớp quy đị
 
     private String soDienThoai;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "ngay_sinh")
+    private LocalDate ngaySinh;
+
     @Column(name = "ngay_vao_lam")
     private LocalDate ngayVaoLam;
 
