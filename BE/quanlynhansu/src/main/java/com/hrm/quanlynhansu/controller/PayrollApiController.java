@@ -62,6 +62,28 @@ public class PayrollApiController {
         return response;
     }
 
+    // 1.5 LẤY LƯƠNG THEO NHÂN VIÊN (Cho trang User xem lương)
+    @GetMapping("/employee/{employeeId}")
+    public List<Map<String, Object>> getPayrollsByEmployee(@PathVariable String employeeId) {
+        List<BangLuong> list = repoBL.findByNhanVien_MaNV(employeeId);
+        return list.stream().map(bl -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", String.valueOf(bl.getId()));
+            map.put("employeeId", employeeId);
+            // Format month as YYYY-MM
+            String month = bl.getNam() + "-" + (bl.getThang() < 10 ? "0" + bl.getThang() : bl.getThang());
+            map.put("month", month);
+            map.put("baseSalary", bl.getLuongChinh() != null ? bl.getLuongChinh() : 0.0);
+            map.put("bonus", bl.getTongThuong() != null ? bl.getTongThuong() : 0.0);
+            map.put("allowance", 0.0); // Không có trong database, trả về 0
+            map.put("insurance", 0.0); // Không có trong database, trả về 0
+            map.put("pit", bl.getTongPhat() != null ? bl.getTongPhat() : 0.0);
+            map.put("status", bl.getTrangThai() != null ? bl.getTrangThai().toLowerCase() : "pending");
+            map.put("payDate", ""); // Không có trong database
+            return map;
+        }).collect(Collectors.toList());
+    }
+
     // 2. THÊM MỚI NHÂN VIÊN VÀO BẢNG LƯƠNG
     @PostMapping
     public ResponseEntity<?> createPayroll(@RequestBody Map<String, Object> body) {
