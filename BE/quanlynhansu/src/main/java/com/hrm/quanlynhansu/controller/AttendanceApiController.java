@@ -28,7 +28,7 @@ public class AttendanceApiController {
         System.out.println(">>> Tham số date nhận được: " + date);
 
         List<ChamCong> list;
-        
+
         if (date == null || date.isEmpty() || date.equals("undefined")) {
             // Nếu không chọn ngày -> Lấy TOÀN BỘ (Để test xem có dữ liệu không)
             System.out.println(">>> Không có ngày -> Lấy tất cả");
@@ -44,7 +44,7 @@ public class AttendanceApiController {
                 list = new ArrayList<>();
             }
         }
-        
+
         return list.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
@@ -54,7 +54,42 @@ public class AttendanceApiController {
         return getAttendance(date); // Gọi lại hàm trên
     }
 
-    // ... (Giữ nguyên phần @PostMapping createAttendance như cũ) ...
+    // 3. LẤY CHẤM CÔNG THEO NHÂN VIÊN (Cho trang User xem chấm công của mình)
+    @GetMapping("/employee/{employeeId}")
+    public List<Map<String, Object>> getAttendanceByEmployee(@PathVariable String employeeId) {
+        System.out.println(">>> API getAttendanceByEmployee được gọi với employeeId: " + employeeId);
+        List<ChamCong> list = repoCC.findByNhanVien_MaNV(employeeId);
+        System.out.println(">>> Tìm thấy " + list.size() + " bản ghi chấm công");
+        return list.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    // 4. CẬP NHẬT CHẤM CÔNG (Cho checkout)
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAttendance(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        try {
+            ChamCong cc = repoCC.findById(id).orElse(null);
+            if (cc == null)
+                return ResponseEntity.notFound().build();
+
+            if (body.get("checkOut") != null && !body.get("checkOut").toString().isEmpty()) {
+                cc.setGioRa(LocalTime.parse(body.get("checkOut").toString()));
+            }
+            if (body.get("hours") != null) {
+                cc.setSoGioLamThem(Double.valueOf(body.get("hours").toString()));
+            }
+            if (body.get("status") != null) {
+                cc.setTrangThai(body.get("status").toString());
+            }
+
+            repoCC.save(cc);
+            return ResponseEntity.ok(convertToDTO(cc));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Lỗi: " + e.getMessage());
+        }
+    }
+
+    // 5. TẠO MỚI CHẤM CÔNG
     @PostMapping
     public ResponseEntity<?> createAttendance(@RequestBody Map<String, Object> body) {
         try {
@@ -66,27 +101,31 @@ public class AttendanceApiController {
             }
 
             NhanVien nv = repoNV.findById(maNV).orElse(null);
-            if (nv == null) return ResponseEntity.badRequest().body("Không tìm thấy nhân viên");
+            if (nv == null)
+                return ResponseEntity.badRequest().body("Không tìm thấy nhân viên");
 
             ChamCong cc = new ChamCong();
             cc.setNhanVien(nv);
             cc.setNgayChamCong(LocalDate.parse(dateStr));
-            
-            if (body.get("checkIn") != null && !body.get("checkIn").toString().isEmpty()) 
+
+            if (body.get("checkIn") != null && !body.get("checkIn").toString().isEmpty())
                 cc.setGioVao(LocalTime.parse(body.get("checkIn").toString()));
-            
-            if (body.get("checkOut") != null && !body.get("checkOut").toString().isEmpty()) 
+
+            if (body.get("checkOut") != null && !body.get("checkOut").toString().isEmpty())
                 cc.setGioRa(LocalTime.parse(body.get("checkOut").toString()));
-            
+
             String status = body.get("status") != null ? body.get("status").toString() : "ontime";
             // Map status từ tiếng Việt sang code (nếu cần)
-            if (status.equalsIgnoreCase("Đúng giờ")) status = "ontime";
-            else if (status.equalsIgnoreCase("Đi muộn")) status = "late";
-            else if (status.equalsIgnoreCase("Vắng mặt")) status = "absent";
+            if (status.equalsIgnoreCase("Đúng giờ"))
+                status = "ontime";
+            else if (status.equalsIgnoreCase("Đi muộn"))
+                status = "late";
+            else if (status.equalsIgnoreCase("Vắng mặt"))
+                status = "absent";
             cc.setTrangThai(status);
 
             if (body.get("hours") != null) {
-                 cc.setSoGioLamThem(Double.valueOf(body.get("hours").toString()));
+                cc.setSoGioLamThem(Double.valueOf(body.get("hours").toString()));
             }
 
             repoCC.save(cc);
@@ -105,7 +144,7 @@ public class AttendanceApiController {
         map.put("date", cc.getNgayChamCong().toString());
         map.put("checkIn", cc.getGioVao() != null ? cc.getGioVao().toString() : "");
         map.put("checkOut", cc.getGioRa() != null ? cc.getGioRa().toString() : "");
-        
+
         double hours = 0;
         if (cc.getGioVao() != null && cc.getGioRa() != null) {
             long seconds = java.time.Duration.between(cc.getGioVao(), cc.getGioRa()).getSeconds();
