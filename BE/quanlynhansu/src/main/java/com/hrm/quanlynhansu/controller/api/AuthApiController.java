@@ -24,18 +24,9 @@ public class AuthApiController {
     // POST /api/auth/login
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
-        // Tìm nhân viên theo email (email format: hoTen@company.com hoặc
-        // ADMIN@company.com)
-        String searchName = request.getEmail().replace("@company.com", "");
-
+        // Tìm nhân viên theo email trực tiếp
         NhanVien employee = nhanVienRepository.findAll().stream()
-                .filter(e -> {
-                    // Match by name or special admin email
-                    if (request.getEmail().equalsIgnoreCase("admin@company.com")) {
-                        return e.getMaNV().equals("ADMIN");
-                    }
-                    return e.getHoTen().equalsIgnoreCase(searchName);
-                })
+                .filter(e -> e.getEmail() != null && e.getEmail().equalsIgnoreCase(request.getEmail()))
                 .findFirst()
                 .orElse(null);
 
