@@ -1,35 +1,37 @@
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\PhongBan.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\PhongBanController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\ChamCongRepository.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\ChamCongController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\LoginController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\AuditLogApiController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\ThuongPhat.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\PhongBanRepository.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\EmployeeApiController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\GiaoDienController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\NhanVienRepository.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\PayrollApiController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\NhanVienPartTime.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\AuditService.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\NhanVienFullTime.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\AttendanceApiController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\BangLuongController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\EmployeeDTO.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\ChamCongService.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\ChamCong.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\Login.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\AuditLog.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\AuthApiController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\ThuongPhatController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\NhanVien.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\ThuongPhatRepository.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\ThuongPhatService.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\AuditLogRepository.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\ThongKeController.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\QuanlynhansuApplication.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\enums\AttendanceStatus.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\enums\LoaiThuongPhat.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\BangLuongService.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\BangLuong.java
-E:\Hoang Phong\OOP-project-main\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\BangLuongRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\ChamCongService.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\ThuongPhatController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\NhanVienFullTime.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\QuanlynhansuApplication.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\ThuongPhatRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\AuditLogRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\LoginController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\AuthApiController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\EmployeeApiController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\enums\AttendanceStatus.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\AuditLogApiController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\PhongBanController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\BangLuongRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\NhanVienPartTime.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\GiaoDienController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\ThuongPhat.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\PhongBanRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\BangLuongService.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\PhongBan.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\api\EmployeeDTO.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\NhanVienRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\enums\LoaiThuongPhat.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\QuyLuong.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\AuditLog.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\QuyLuongRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\AttendanceApiController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\BangLuongController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\PayrollApiController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\NhanVien.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\ChamCongController.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\ChamCong.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\BangLuong.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\repository\ChamCongRepository.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\ThuongPhatService.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\entity\Login.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\service\AuditService.java
+C:\Users\HoangNam\OOP-project\BE\quanlynhansu\src\main\java\com\hrm\quanlynhansu\controller\ThongKeController.java

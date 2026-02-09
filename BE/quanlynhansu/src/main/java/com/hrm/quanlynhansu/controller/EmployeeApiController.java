@@ -33,12 +33,16 @@ import com.hrm.quanlynhansu.repository.PhongBanRepository;
 @CrossOrigin(origins = "http://localhost:5173")
 public class EmployeeApiController {
 
-    @Autowired private NhanVienRepository nhanVienRepository;
-    @Autowired private PhongBanRepository phongBanRepository;
-    
+    @Autowired
+    private NhanVienRepository nhanVienRepository;
+    @Autowired
+    private PhongBanRepository phongBanRepository;
+
     // Repository phụ trợ để xóa dữ liệu liên quan
-    @Autowired private BangLuongRepository bangLuongRepository; 
-    @Autowired private ChamCongRepository chamCongRepository;   
+    @Autowired
+    private BangLuongRepository bangLuongRepository;
+    @Autowired
+    private ChamCongRepository chamCongRepository;
 
     // 1. LẤY DANH SÁCH NHÂN VIÊN
     @GetMapping
@@ -46,6 +50,16 @@ public class EmployeeApiController {
         return nhanVienRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    // 1.5 LẤY 1 NHÂN VIÊN THEO ID (FIX CHO USER PROFILE)
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEmployeeById(@PathVariable String id) {
+        NhanVien nv = nhanVienRepository.findById(id).orElse(null);
+        if (nv == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(convertToDTO(nv));
     }
 
     // 2. LẤY PHÒNG BAN (Dropdown)
@@ -59,8 +73,10 @@ public class EmployeeApiController {
     public ResponseEntity<?> createEmployee(@RequestBody Map<String, Object> body) {
         try {
             String type = "FULL_TIME";
-            if (body.get("fullTimeType") != null) type = body.get("fullTimeType").toString();
-            if (body.get("loaiNhanVien") != null) type = body.get("loaiNhanVien").toString();
+            if (body.get("fullTimeType") != null)
+                type = body.get("fullTimeType").toString();
+            if (body.get("loaiNhanVien") != null)
+                type = body.get("loaiNhanVien").toString();
 
             NhanVien nv;
             if ("PART_TIME".equalsIgnoreCase(type) || "Thời vụ".equals(type)) {
@@ -71,8 +87,10 @@ public class EmployeeApiController {
 
             updateEntityFromMap(nv, body);
 
-            if (nv.getPassword() == null) nv.setPassword("123456");
-            if (nv.getRole() == null) nv.setRole("user");
+            if (nv.getPassword() == null)
+                nv.setPassword("123456");
+            if (nv.getRole() == null)
+                nv.setRole("user");
 
             nhanVienRepository.save(nv);
             return ResponseEntity.ok(convertToDTO(nv));
@@ -86,7 +104,8 @@ public class EmployeeApiController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable String id, @RequestBody Map<String, Object> body) {
         NhanVien nv = nhanVienRepository.findById(id).orElse(null);
-        if (nv == null) return ResponseEntity.notFound().build();
+        if (nv == null)
+            return ResponseEntity.notFound().build();
 
         try {
             updateEntityFromMap(nv, body);
@@ -101,13 +120,16 @@ public class EmployeeApiController {
     @DeleteMapping("/{id}")
     @Transactional // ✅ Bắt buộc có để xóa nhiều bảng
     public ResponseEntity<?> deleteEmployee(@PathVariable String id) {
-        if (!nhanVienRepository.existsById(id)) return ResponseEntity.notFound().build();
+        if (!nhanVienRepository.existsById(id))
+            return ResponseEntity.notFound().build();
 
         try {
             // Xóa dữ liệu liên quan trước (Lương & Chấm công)
-            if (bangLuongRepository != null) bangLuongRepository.deleteByNhanVien_MaNV(id);
-            if (chamCongRepository != null) chamCongRepository.deleteByNhanVien_MaNV(id);
-            
+            if (bangLuongRepository != null)
+                bangLuongRepository.deleteByNhanVien_MaNV(id);
+            if (chamCongRepository != null)
+                chamCongRepository.deleteByNhanVien_MaNV(id);
+
             // Sau đó xóa nhân viên
             nhanVienRepository.deleteById(id);
             return ResponseEntity.ok().build();
@@ -119,48 +141,63 @@ public class EmployeeApiController {
 
     // --- HÀM HỖ TRỢ MAP DỮ LIỆU ---
     private void updateEntityFromMap(NhanVien nv, Map<String, Object> body) {
-        if (body.get("maNV") != null) nv.setMaNV(body.get("maNV").toString());
-        else if (body.get("code") != null) nv.setMaNV(body.get("code").toString());
+        if (body.get("maNV") != null)
+            nv.setMaNV(body.get("maNV").toString());
+        else if (body.get("code") != null)
+            nv.setMaNV(body.get("code").toString());
 
-        if (body.get("hoTen") != null) nv.setHoTen(body.get("hoTen").toString());
-        else if (body.get("name") != null) nv.setHoTen(body.get("name").toString());
-        
-        if (body.get("email") != null) nv.setEmail(body.get("email").toString());
-        
-        if (body.get("soDienThoai") != null) nv.setSoDienThoai(body.get("soDienThoai").toString());
-        else if (body.get("phone") != null) nv.setSoDienThoai(body.get("phone").toString());
+        if (body.get("hoTen") != null)
+            nv.setHoTen(body.get("hoTen").toString());
+        else if (body.get("name") != null)
+            nv.setHoTen(body.get("name").toString());
 
-        // XỬ LÝ LƯƠNG (QUAN TRỌNG: Full-time lưu vào luongCoBan, Part-time lưu vào luongTheoGio)
+        if (body.get("email") != null)
+            nv.setEmail(body.get("email").toString());
+
+        if (body.get("soDienThoai") != null)
+            nv.setSoDienThoai(body.get("soDienThoai").toString());
+        else if (body.get("phone") != null)
+            nv.setSoDienThoai(body.get("phone").toString());
+
+        // XỬ LÝ LƯƠNG (QUAN TRỌNG: Full-time lưu vào luongCoBan, Part-time lưu vào
+        // luongTheoGio)
         Double luongInput = 0.0;
-        if (body.get("luongCoBan") != null) luongInput = Double.valueOf(body.get("luongCoBan").toString());
-        else if (body.get("baseSalary") != null) luongInput = Double.valueOf(body.get("baseSalary").toString());
-        else if (body.get("luong") != null) luongInput = Double.valueOf(body.get("luong").toString());
+        if (body.get("luongCoBan") != null)
+            luongInput = Double.valueOf(body.get("luongCoBan").toString());
+        else if (body.get("baseSalary") != null)
+            luongInput = Double.valueOf(body.get("baseSalary").toString());
+        else if (body.get("luong") != null)
+            luongInput = Double.valueOf(body.get("luong").toString());
 
         if (nv instanceof NhanVienPartTime) {
             nv.setLuongTheoGio(luongInput); // Lưu vào lương theo giờ
             nv.setLuongCoBan(0.0);
         } else {
-            nv.setLuongCoBan(luongInput);   // Lưu vào lương cơ bản
+            nv.setLuongCoBan(luongInput); // Lưu vào lương cơ bản
             nv.setLuongTheoGio(0.0);
         }
 
         // CHỨC VỤ
         Object chucVu = body.get("chucVu");
-        if (chucVu == null) chucVu = body.get("position");
-        if (chucVu == null) chucVu = body.get("title");
-        if (chucVu != null) nv.setChucVu(chucVu.toString());
+        if (chucVu == null)
+            chucVu = body.get("position");
+        if (chucVu == null)
+            chucVu = body.get("title");
+        if (chucVu != null)
+            nv.setChucVu(chucVu.toString());
 
         // XỬ LÝ PHÒNG BAN (FIX LỖI KHÔNG LƯU ĐƯỢC)
         Object pbId = body.get("maPhong");
-        if (pbId == null) pbId = body.get("departmentId");
-        
+        if (pbId == null)
+            pbId = body.get("departmentId");
+
         if (pbId != null && !pbId.toString().isEmpty()) {
             PhongBan pb = phongBanRepository.findById(pbId.toString()).orElse(null);
             nv.setPhongBan(pb);
         } else {
             nv.setPhongBan(null);
         }
-        
+
         // NGÀY
         if (body.get("ngaySinh") != null && !body.get("ngaySinh").toString().isEmpty()) {
             nv.setNgaySinh(LocalDate.parse(body.get("ngaySinh").toString()));
@@ -174,7 +211,7 @@ public class EmployeeApiController {
         map.put("name", nv.getHoTen());
         map.put("email", nv.getEmail());
         map.put("phone", nv.getSoDienThoai());
-        
+
         if (nv.getPhongBan() != null) {
             map.put("department", nv.getPhongBan().getTenPhong());
             map.put("departmentId", nv.getPhongBan().getMaPhong());
@@ -185,17 +222,26 @@ public class EmployeeApiController {
 
         map.put("position", nv.getChucVu());
         map.put("chucVu", nv.getChucVu());
-        
+        map.put("title", nv.getChucVu() != null ? nv.getChucVu() : "Nhân viên");
+
         // FIX LỖI HIỂN THỊ LƯƠNG: Nếu lương cơ bản null/0 thì lấy lương theo giờ
         Double luong = nv.getLuongCoBan();
         if (luong == null || luong == 0) {
             luong = nv.getLuongTheoGio(); // Lấy lương Part-time
         }
-        
+
         map.put("baseSalary", luong != null ? luong : 0.0);
         map.put("luong", luong != null ? luong : 0.0);
-        
+
         map.put("role", nv.getRole());
+
+        // === THÊM CÁC TRƯỜNG MỚI CHO USER PROFILE ===
+        map.put("manager", nv.getQuanLy() != null ? nv.getQuanLy() : "—");
+        map.put("location", nv.getViTri() != null ? nv.getViTri() : "Văn phòng chính");
+        map.put("address", nv.getDiaChi() != null ? nv.getDiaChi() : "");
+        map.put("dob", nv.getNgaySinh() != null ? nv.getNgaySinh().toString() : "");
+        map.put("startDate", nv.getNgayVaoLam() != null ? nv.getNgayVaoLam().toString() : "");
+
         return map;
     }
 }

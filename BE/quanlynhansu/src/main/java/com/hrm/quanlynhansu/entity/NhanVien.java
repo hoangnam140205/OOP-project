@@ -65,16 +65,27 @@ public abstract class NhanVien { // Giữ nguyên abstract theo ý bạn
     @Column(name = "role")
     private String role;
 
+    @Column(name = "dia_chi")
+    private String diaChi;
+
+    @Column(name = "quan_ly")
+    private String quanLy;
+
+    @Column(name = "vi_tri")
+    private String viTri;
+
     @ManyToOne
     @JoinColumn(name = "ma_phong")
     private PhongBan phongBan;
 
     // Các hàm abstract giữ nguyên
     public abstract Double tinhLuong();
+
     public abstract Double tinhLuongTheoThang(double soNgayLam);
-    
+
     public Double tinhLuongTheoThang(double soNgayLam, double tongGioLam) {
         return tinhLuongTheoThang(soNgayLam);
     }
+
     public abstract String getTenLoai();
 }
